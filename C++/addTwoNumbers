@@ -1,0 +1,45 @@
+class Solution{
+    public:
+        /**
+         * @brief 两数相加问题：将两个逆序存储的链表表示的整数相加，返回新的链表
+         * 
+         * @param l1 第一个逆序存储的整数链表（个位在链表头部）
+         * @param l2 第二个逆序存储的整数链表（个位在链表头部）
+         * @return ListNode* 相加结果的逆序存储链表
+         * 
+         * 该方法使用虚拟头节点简化链表操作，通过进位处理实现加法运算。
+         * 时间复杂度：O(max(m, n))，其中m和n分别是两个链表的长度
+         * 空间复杂度：O(max(m, n))，需要创建一个新链表存储结果
+         */
+        ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+            // 创建虚拟头节点，简化链表操作
+            ListNode* dummy = new ListNode(0);
+            // cur指针用于遍历和构建新链表
+            ListNode* cur = dummy;
+            // carry变量用于存储进位
+            int carry = 0;
+            
+            // 循环条件：处理两个链表长度不同和最后一位有进位的情况
+            while (l1 != nullptr || l2 != nullptr || carry != 0) {
+                // 获取当前节点的值，如果链表已结束则用0代替
+                int x = l1 != nullptr ? l1->val : 0;
+                int y = l2 != nullptr ? l2->val : 0;
+                
+                // 计算当前位的和，包括进位
+                int sum = x + y + carry;
+                // 更新进位（sum除以10的商）
+                carry = sum / 10;
+                // 创建新节点存储当前位的结果（sum对10的余数）
+                cur->next = new ListNode(sum % 10);
+                // 移动cur指针到下一位
+                cur = cur->next;
+                
+                // 如果链表未结束，移动到下一个节点
+                if (l1 != nullptr) l1 = l1->next;
+                if (l2 != nullptr) l2 = l2->next;
+            }
+            
+            // 返回结果链表的头节点（跳过虚拟头节点）
+            return dummy->next;
+        }
+};
